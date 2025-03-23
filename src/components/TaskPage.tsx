@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import TaskList from "./TaskList";
 import TaskFilter from "./TaskFilter";
+import "../styles/TaskPage.css";
 
 type TaskPageProps = {
   tasks: Task[];
@@ -41,16 +42,18 @@ const TaskPage = ({ tasks, onDelete }: TaskPageProps) => {
   return (
     <>
       <div className="task-container">
-        <div className="header-section">
-          <Link to="/tasks/new">
-            <button className="add-task-btn">Add New Task</button>
-          </Link>
+      <div className="header-section">
+        <Link to="/tasks/new">
+          <button className="add-task-btn">Add New Task</button>
+        </Link>
+        {filteredTasks.length > 0 && (
           <div className="filter-container">
             <TaskFilter onFilterChange={handleFilterChange} />
           </div>
-        </div>
-        <TaskList tasks={filteredTasks} onDelete={onDelete} />
+        )}
       </div>
+      <TaskList tasks={filteredTasks} onDelete={onDelete} />
+    </div>
     </>
   );
 };

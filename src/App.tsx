@@ -3,6 +3,8 @@ import "./App.css";
 import TaskForm from "./components/TaskForm";
 import TaskPage from "./components/TaskPage";
 import TaskEditPage from "./components/TaskEditPage";
+import Header from "./pages/Header";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -51,6 +53,7 @@ function App() {
 
   return (
     <Router>
+      <Header/>
       <Routes>
         <Route
           path="/"

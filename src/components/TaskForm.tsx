@@ -92,11 +92,10 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
           <option value="Completed">Completed</option>
         </select>
         <button type="submit">{task.id ? "Update" : "Add"} Task</button>
+        <button type="button" onClick={handleBack}>
+          Back
+        </button>
       </form>
-
-      <button type="button" onClick={handleBack}>
-        Back
-      </button>
     </>
   );
 };

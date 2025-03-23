@@ -1,0 +1,36 @@
+.task-container {
+    padding: 20px;
+  }
+  
+  .header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures spacing between button and filter */
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .add-task-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .add-task-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .filter-container {
+    flex-grow: 1; /* Allows filters to take available space */
+    display: flex;
+    justify-content: flex-end; /* Align filter to the right */
+  }
+
+  .label_pd {
+    padding: 5px;
+  }
+  

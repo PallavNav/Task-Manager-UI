@@ -19,7 +19,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
   return (
     <div>
       {tasks.length === 0 ? (
-        <p>No tasks found</p>
+        <i>No tasks found</i>
       ) : (
         <>
           <table className="task-table">
