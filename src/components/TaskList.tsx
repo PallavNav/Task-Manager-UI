@@ -34,7 +34,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
               </tr>
             </thead>
             <tbody>
-              {tasks.map((task) => (
+              {tasks.length > 0 && tasks.map((task) => (
                 <tr key={task.id}>
                   <td>{task.title}</td>
                   <td>{task.description}</td>
