@@ -5,6 +5,7 @@ import TaskForm from "./components/TaskForm";
 import TaskPage from "./components/TaskPage";
 import TaskEditPage from "./components/TaskEditPage";
 import Header from "./pages/Header";
+import { apiServices } from "./services/service";
 
 import {
   BrowserRouter as Router,
@@ -24,7 +25,7 @@ type Task = {
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  // const [filteredTask, setFilteredTask] = useState<Task[]>(tasks);
+  const BASE_URL = apiServices.base_url;
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ function App() {
 
   const fetchAllTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/nav/taskify/tasks');
+      const response = await axios.get(`${BASE_URL}/tasks`);
       setTasks(response.data);
       // setFilteredTask(response.data);
     } catch (error) {
@@ -56,7 +57,7 @@ function App() {
 
   const updateUserTask = async (newTask: Task) => {
     try {
-      await axios.put(`http://localhost:9000/nav/taskify/tasks/${newTask.id}`, newTask);
+      await axios.put(`${BASE_URL}/tasks/${newTask.id}`, newTask);
       fetchAllTasks();
     } catch (error) {
       console.error("Error updating tasks", error);
@@ -65,7 +66,7 @@ function App() {
 
   const saveUserTask = async (newTask: Task) => {
     try {
-      await axios.post('http://localhost:9000/nav/taskify/tasks', newTask);
+      await axios.post(`${BASE_URL}/tasks`, newTask);
       fetchAllTasks();
     } catch (error) {
       console.error("Error fetching tasks", error);
@@ -74,7 +75,7 @@ function App() {
 
   const deleteTask = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:9000/nav/taskify/tasks/${id}`);
+      await axios.delete(`${BASE_URL}/tasks/${id}`);
       fetchAllTasks();
     } catch (error) {
       console.error("Error deleting tasks", error);
