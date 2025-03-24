@@ -1,9 +1,7 @@
 export const apiServices = {
     get base_url() {
-        console.log("Current URL:", location.href);
-        return location.href.includes('localhost') 
-            ? "http://localhost:9000/nav/taskify/" 
-            : "https://taskify-nav-be.vercel.app/nav/taskify/";
+        console.log("VITE_API_URL:", import.meta.env.VITE_API_URL);
+        return import.meta.env.VITE_API_URL || "http://localhost:9000/nav/taskify/"; // Fallback
     },
     test: "Nav"
 };
