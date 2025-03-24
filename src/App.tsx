@@ -26,6 +26,10 @@ type Task = {
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const BASE_URL = apiServices.base_url;
+  console.log("API URL:", import.meta.env.VITE_API_URL);
+  console.log("BASE_URL:", BASE_URL);
+
+
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
   useEffect(() => {
