@@ -3,6 +3,7 @@ import TaskForm from "../components/TaskForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiServices } from "../services/service";
+import { ConvertDate } from "../util/ConvertDate";
 
 type TaskEditPageProps = {
   tasks: Task[];
@@ -32,6 +33,7 @@ const TaskEditPage = ({ onSave }: TaskEditPageProps) => {
   const fetchTaskDetailsToBeEdited = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/tasks/${id}`);
+      response.data.dueDate = ConvertDate(response.data.dueDate);
       setTaskToEdit(response.data);
     } catch (error) {
       console.error("Error fetching tasks", error);

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "../styles/TaskForm.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 type TaskFormProps = {
@@ -33,15 +32,6 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
       setTask(existingTask);
     }
   }, [existingTask]);
-
-  const updateTask = async (task:Task) => {
-    try {
-      const response = await axios.put(`http://localhost:9000/nav/taskify/tasks`);
-      // setTaskToEdit(response.data);
-    } catch (error) {
-      console.error("Error fetching tasks", error);
-    }
-  }
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -103,7 +93,7 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
         </select>
         <button type="submit">{task.id ? "Update" : "Add"} Task</button>
         <button type="button" onClick={handleBack}>
-          Back
+          Manage Tasks
         </button>
       </form>
     </>

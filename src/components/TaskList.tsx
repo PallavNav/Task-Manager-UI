@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "../styles/TaskList.css";
+import { ConvertDate } from "../util/ConvertDate";
 
 type TaskListProps = {
   tasks: Task[];
@@ -17,9 +18,9 @@ type Task = {
 
 const TaskList = ({ tasks, onDelete }: TaskListProps) => {
   return (
-    <div>
+    <div className="no-taks">
       {tasks.length === 0 ? (
-        <i>No tasks found</i>
+        <i >No tasks found</i>
       ) : (
         <>
           <table className="task-table">
@@ -38,7 +39,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
                 <tr key={task.id}>
                   <td>{task.title}</td>
                   <td>{task.description}</td>
-                  <td>{task.dueDate}</td>
+                  <td>{ConvertDate(task.dueDate)}</td>
                   <td>{task.priority}</td>
                   <td>{task.status}</td>
                   <td>

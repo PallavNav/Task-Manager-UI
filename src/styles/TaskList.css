@@ -5,7 +5,7 @@
   }
   
   .task-table th, .task-table td {
-    border: 1px solid #ddd;
+    border: 1px solid #000;
     padding: 10px;
     text-align: left;
   }
@@ -29,5 +29,9 @@
   .task-table button:last-child {
     background-color: #dc3545;
     color: white;
+  }
+
+  .no-taks {
+    text-align: left !important;
   }
   

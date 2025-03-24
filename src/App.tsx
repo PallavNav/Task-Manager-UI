@@ -6,12 +6,13 @@ import TaskPage from "./components/TaskPage";
 import TaskEditPage from "./components/TaskEditPage";
 import Header from "./pages/Header";
 import { apiServices } from "./services/service";
+import { ConvertDate } from "./util/ConvertDate";
 
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 
 type Task = {
@@ -28,7 +29,7 @@ function App() {
   const BASE_URL = apiServices.base_url;
   console.log("API URL:", import.meta.env.VITE_API_URL);
   console.log("BASE_URL:", BASE_URL);
-
+  const navigate = useNavigate();
 
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
@@ -36,11 +37,17 @@ function App() {
     fetchAllTasks();
   }, [])
 
-  const fetchAllTasks = async () => {
+  const fetchAllTasks = async (type?: any) => {
     try {
       const response = await axios.get(`${BASE_URL}/tasks`);
       setTasks(response.data);
-      // setFilteredTask(response.data);
+      if (type === 'CREATE') {
+        alert('Task Created Successfully!');
+        navigate('/');
+      } else if (type === 'UPDATE') {
+        alert('Task Updated Successfully!');
+        navigate('/');
+      }
     } catch (error) {
       console.error("Error fetching tasks", error);
     }
@@ -50,6 +57,7 @@ function App() {
     if (newTask.id) {
       updateUserTask(newTask);
     } else {
+      newTask.dueDate = ConvertDate(newTask.dueDate);
       const newTaskToAdd = {
         ...newTask,
         id: Math.random().toString(36).substr(2, 9),
@@ -61,8 +69,9 @@ function App() {
 
   const updateUserTask = async (newTask: Task) => {
     try {
+      newTask.dueDate = ConvertDate(newTask.dueDate);
       await axios.put(`${BASE_URL}/tasks/${newTask.id}`, newTask);
-      fetchAllTasks();
+      fetchAllTasks('UPDATE');
     } catch (error) {
       console.error("Error updating tasks", error);
     }
@@ -71,7 +80,7 @@ function App() {
   const saveUserTask = async (newTask: Task) => {
     try {
       await axios.post(`${BASE_URL}/tasks`, newTask);
-      fetchAllTasks();
+      fetchAllTasks('CREATE');
     } catch (error) {
       console.error("Error fetching tasks", error);
     }
@@ -87,7 +96,8 @@ function App() {
   };
 
   return (
-    <Router>
+    <>
+      {/* <Router> */}
       <Header />
       <Routes>
         <Route
@@ -104,7 +114,8 @@ function App() {
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </Router>
+      {/* </Router> */}
+    </>
   );
 }
 
