@@ -24,7 +24,7 @@ type Task = {
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [filteredTask, setFilteredTask] = useState<Task[]>(tasks);
+  // const [filteredTask, setFilteredTask] = useState<Task[]>(tasks);
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function App() {
     try {
       const response = await axios.get('http://localhost:9000/nav/taskify/tasks');
       setTasks(response.data);
-      setFilteredTask(response.data);
+      // setFilteredTask(response.data);
     } catch (error) {
       console.error("Error fetching tasks", error);
     }

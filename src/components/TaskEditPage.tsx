@@ -17,7 +17,7 @@ type Task = {
   status: "Pending" | "Completed";
 };
 
-const TaskEditPage = ({ tasks, onSave }: TaskEditPageProps) => {
+const TaskEditPage = ({ onSave }: TaskEditPageProps) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
