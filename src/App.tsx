@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
+import axios from "axios";
 import TaskForm from "./components/TaskForm";
 import TaskPage from "./components/TaskPage";
 import TaskEditPage from "./components/TaskEditPage";
@@ -26,34 +27,63 @@ function App() {
   const [filteredTask, setFilteredTask] = useState<Task[]>(tasks);
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
+  useEffect(() => {
+    fetchAllTasks();
+  }, [])
+
+  const fetchAllTasks = async () => {
+    try {
+      const response = await axios.get('http://localhost:9000/nav/taskify/tasks');
+      setTasks(response.data);
+      setFilteredTask(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+    }
+  }
+
   const saveTask = (newTask: Task) => {
     if (newTask.id) {
-      setTasks((prev: any) =>
-        prev.map((item: any) => (item.id === newTask.id ? newTask : item))
-      );
-      setFilteredTask((prev: any) =>
-        prev.map((item: any) => (item.id === newTask.id ? newTask : item))
-      );
+      updateUserTask(newTask);
     } else {
       const newTaskToAdd = {
         ...newTask,
         id: Math.random().toString(36).substr(2, 9),
       };
-      setTasks([...tasks, newTaskToAdd]);
-      setFilteredTask([...filteredTask, newTaskToAdd]);
+      saveUserTask(newTaskToAdd);
     }
     setTaskToEdit(null);
   };
 
-  const deleteTask = (id: string) => {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-    setTasks(updatedTasks);
-    setFilteredTask(updatedTasks);
+  const updateUserTask = async (newTask: Task) => {
+    try {
+      await axios.put(`http://localhost:9000/nav/taskify/tasks/${newTask.id}`, newTask);
+      fetchAllTasks();
+    } catch (error) {
+      console.error("Error updating tasks", error);
+    }
+  }
+
+  const saveUserTask = async (newTask: Task) => {
+    try {
+      await axios.post('http://localhost:9000/nav/taskify/tasks', newTask);
+      fetchAllTasks();
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+    }
+  }
+
+  const deleteTask = async (id: string) => {
+    try {
+      await axios.delete(`http://localhost:9000/nav/taskify/tasks/${id}`);
+      fetchAllTasks();
+    } catch (error) {
+      console.error("Error deleting tasks", error);
+    }
   };
 
   return (
     <Router>
-      <Header/>
+      <Header />
       <Routes>
         <Route
           path="/"

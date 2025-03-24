@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import TaskForm from "../components/TaskForm";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 type TaskEditPageProps = {
   tasks: Task[];
@@ -18,8 +20,22 @@ type Task = {
 const TaskEditPage = ({ tasks, onSave }: TaskEditPageProps) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
-  const taskToEdit = tasks.find((task) => task.id === id);
+  useEffect(() => {
+    console.log('Changes!!');
+    fetchTaskDetailsToBeEdited();
+  }, [])
+
+  const fetchTaskDetailsToBeEdited = async () => {
+    try {
+      const response = await axios.get(`http://localhost:9000/nav/taskify/tasks/${id}`);
+      setTaskToEdit(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks", error);
+    }
+  }
+
   if (!taskToEdit) {
     navigate("/");
     return null;

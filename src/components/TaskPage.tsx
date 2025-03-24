@@ -46,7 +46,7 @@ const TaskPage = ({ tasks, onDelete }: TaskPageProps) => {
         <Link to="/tasks/new">
           <button className="add-task-btn">Add New Task</button>
         </Link>
-        {filteredTasks.length > 0 && (
+        {tasks.length > 0 && (
           <div className="filter-container">
             <TaskFilter onFilterChange={handleFilterChange} />
           </div>
