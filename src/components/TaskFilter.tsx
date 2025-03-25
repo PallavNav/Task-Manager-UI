@@ -16,14 +16,14 @@ const TaskFilter = ({ onFilterChange }: TaskFilterProps) => {
 
   return (
     <div className="filter_style">
-      <label className="label_pd">Status:</label>
+      <label className="label_pd field-label">Status:</label>
       <select name="status" value={filters.status} onChange={handleChange}>
         <option value="">All</option>
         <option value="Pending">Pending</option>
         <option value="Completed">Completed</option>
       </select>
 
-      <label className="label_pd">Priority:</label>
+      <label className="label_pd field-label">Priority:</label>
       <select name="priority" value={filters.priority} onChange={handleChange}>
         <option value="">All</option>
         <option value="Low">Low</option>

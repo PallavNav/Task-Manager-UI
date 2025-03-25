@@ -5,6 +5,19 @@
     background: #333;
     color: white;
     text-align: center;
-    z-index: 1000; /* Ensures it stays above other elements */
+    z-index: 1000;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+  }
+
+  .subscript {
+    font-size: 1rem;
+  }
+
+  .text-content {
+    margin-left: 12rem;
   }
   

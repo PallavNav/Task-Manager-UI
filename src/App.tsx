@@ -87,11 +87,14 @@ function App() {
   }
 
   const deleteTask = async (id: string) => {
-    try {
-      await axios.delete(`${BASE_URL}/tasks/${id}`);
-      fetchAllTasks();
-    } catch (error) {
-      console.error("Error deleting tasks", error);
+    const deleteConfirmation = window.confirm('Sure you want to delete this task?');
+    if(deleteConfirmation) {
+      try {
+        await axios.delete(`${BASE_URL}/tasks/${id}`);
+        fetchAllTasks();
+      } catch (error) {
+        console.error("Error deleting tasks", error);
+      }
     }
   };
 

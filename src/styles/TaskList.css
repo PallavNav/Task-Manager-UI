@@ -21,8 +21,8 @@
     cursor: pointer;
   }
   
-  .task-table button:first-child {
-    background-color:  #007bff;
+  .edit-button {
+    background-color:  dimgray !important;
     color: white;
   }
   

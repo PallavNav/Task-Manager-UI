@@ -18,7 +18,7 @@ type Task = {
 
 const TaskList = ({ tasks, onDelete }: TaskListProps) => {
   return (
-    <div className="no-taks">
+    <div className="no-taks" style={{height:"100vh"}}>
       {tasks.length === 0 ? (
         <i >No tasks found</i>
       ) : (
@@ -26,12 +26,12 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
           <table className="task-table">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Due Date</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th className="field-label">Title</th>
+                <th className="field-label">Description</th>
+                <th className="field-label">Due Date</th>
+                <th className="field-label">Priority</th>
+                <th className="field-label">Status</th>
+                <th className="field-label">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -44,7 +44,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
                   <td>{task.status}</td>
                   <td>
                     <Link to={`/tasks/${task.id}`}>
-                      <button>Edit</button>
+                      <button className="edit-button">Edit</button>
                     </Link>
                     <button onClick={() => onDelete(task.id)}>Delete</button>
                   </td>
