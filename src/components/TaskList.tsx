@@ -78,6 +78,9 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
                   <td>{task.priority}</td>
                   <td>{task.status}</td>
                   <td>
+                    <Link to={`/tasks/details/${task.id}`}>
+                      <button className="edit-button">Details</button>
+                    </Link>
                     <Link to={`/tasks/${task.id}`}>
                       <button className="edit-button">Edit</button>
                     </Link>

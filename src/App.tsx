@@ -4,6 +4,7 @@ import axios from "axios";
 import TaskForm from "./components/TaskForm";
 import TaskPage from "./components/TaskPage";
 import TaskEditPage from "./components/TaskEditPage";
+import TaskDetails from "./components/TaskDetails";
 import Header from "./pages/Header";
 import { apiServices } from "./services/service";
 import { ConvertDate } from "./util/ConvertDate";
@@ -123,6 +124,10 @@ function App() {
           <Route
             path="/tasks/:id"
             element={<TaskEditPage tasks={tasks} onSave={saveTask} />}
+          />
+          <Route
+            path="/tasks/details/:id"
+            element={<TaskDetails/>}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

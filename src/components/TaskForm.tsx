@@ -96,6 +96,7 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
           name="dueDate"
           value={task.dueDate}
           onChange={handleChange}
+          min={new Date().toISOString().split("T")[0]}
         />
         <label className="field-label">Priority:</label>
         <select name="priority" value={task.priority} onChange={handleChange}>
