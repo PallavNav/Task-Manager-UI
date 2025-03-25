@@ -1,26 +1,20 @@
-.no-tasks {
+.task-details {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9;
     text-align: left;
   }
   
   .task-info {
-    width: 60%;
-    max-width: 600px;
+    width: 57.5rem;
+    min-width: 57.5rem;
     background: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
   }
   
   .task-info p {
     font-size: 18px;
-    margin: 10px 0;
     word-wrap: break-word;
     white-space: pre-wrap;
   }

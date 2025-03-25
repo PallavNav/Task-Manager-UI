@@ -20,7 +20,7 @@ type Task = {
 const TaskList = ({ tasks, onDelete }: TaskListProps) => {
   const [sortOrder, setSortOrder] = useState<string>('desc');
   const [sortColumn, setSortColumn] = useState<any>('dueDate');
-
+  const truncationLimit = 25;
   useEffect(() => {
     handleSort("dueDate", "asc");
   }, [tasks]);
@@ -61,19 +61,19 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
           <table className="task-table">
             <thead>
               <tr>
-                <th className="field-label cursor sortable" onClick={() => handleSort("title",undefined)}>Title {getSortIndicator("title")}</th>
-                <th className="field-label cursor sortable" onClick={() => handleSort("description",undefined)}>Description {getSortIndicator("description")}</th>
-                <th className="field-label cursor sortable" onClick={() => handleSort("dueDate",undefined)}>Due Date {getSortIndicator("dueDate")}</th>
-                <th className="field-label cursor sortable" onClick={() => handleSort("priority",undefined)}>Priority {getSortIndicator("priority")}</th>
-                <th className="field-label cursor sortable" onClick={() => handleSort("status",undefined)}>Status {getSortIndicator("status")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("title", undefined)}>Title {getSortIndicator("title")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("description", undefined)}>Description {getSortIndicator("description")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("dueDate", undefined)}>Due Date {getSortIndicator("dueDate")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("priority", undefined)}>Priority {getSortIndicator("priority")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("status", undefined)}>Status {getSortIndicator("status")}</th>
                 <th className="field-label">Actions</th>
               </tr>
             </thead>
             <tbody>
               {tasks.length > 0 && tasks.map((task) => (
                 <tr key={task.id}>
-                  <td>{task.title}</td>
-                  <td>{task.description}</td>
+                  <td>{(task.title.length > truncationLimit) ? task.title.slice(0, truncationLimit).concat('...') : task.title}</td>
+                  <td>{(task.description.length > truncationLimit) ? task.description.slice(0, truncationLimit).concat('...') : task.description}</td>
                   <td>{ConvertDate(task.dueDate)}</td>
                   <td>{task.priority}</td>
                   <td>{task.status}</td>

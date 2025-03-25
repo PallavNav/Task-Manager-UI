@@ -44,20 +44,20 @@ const TaskDetails = () => {
 
     return (
         <>
-            <div className="no-tasks">
-                <h2>Task Details</h2>
+            <div className="task-details">
                 <div className="task-info">
                     <p><strong>Title:</strong> {taskDetails.title}</p>
                     <p><strong>Description:</strong> {taskDetails.description}</p>
                     <p><strong>Due Date:</strong> {taskDetails.dueDate}</p>
                     <p><strong>Priority:</strong> <span className={`priority-${taskDetails?.priority?.toLowerCase()}`}>{taskDetails?.priority}</span></p>
                     <p><strong>Status:</strong> <span className={`status-${taskDetails?.status?.toLowerCase()}`}>{taskDetails?.status}</span></p>
+                    <button type="button" onClick={handleBack} className="edit-button">
+                        Manage Tasks
+                    </button>
                 </div>
-                <button type="button" onClick={handleBack} className="edit-button">
-                Manage Tasks
-            </button>
+
             </div>
-            
+
         </>
 
 
