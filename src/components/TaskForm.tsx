@@ -23,7 +23,7 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
     title: "",
     description: "",
     dueDate: "",
-    priority: "Medium",
+    priority: "Low",
     status: "Pending",
   });
   const [errors, setErrors] = useState<{ title?: string; description?: string; dueDate?: string }>({});
