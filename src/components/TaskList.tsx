@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "../styles/TaskList.css";
 import { ConvertDate } from "../util/ConvertDate";
+import { useState, useEffect } from "react";
 
 type TaskListProps = {
   tasks: Task[];
@@ -17,8 +18,42 @@ type Task = {
 };
 
 const TaskList = ({ tasks, onDelete }: TaskListProps) => {
+  const [sortOrder, setSortOrder] = useState<string>('desc');
+  const [sortColumn, setSortColumn] = useState<any>('dueDate');
+
+  useEffect(() => {
+    handleSort("dueDate", "asc");
+  }, [tasks]);
+
+  const handleSort = (column: any, order: any) => {
+    order = sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortColumn(column);
+    setSortOrder(order);
+
+    tasks.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      if (column === "dueDate") {
+        valA = new Date(valA) as unknown as string;
+        valB = new Date(valB) as unknown as string;
+      }
+
+      if (valA < valB) return order === "asc" ? -1 : 1;
+      if (valA > valB) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
+
+  const getSortIndicator = (column: keyof Task) => {
+    if (sortColumn === column) {
+      return sortOrder === "asc" ? " ↑" : " ↓";
+    }
+    return "";
+  };
+
   return (
-    <div className="no-taks" style={{height:"100vh"}}>
+    <div className="no-taks" style={{ height: "100vh" }}>
       {tasks.length === 0 ? (
         <i >No tasks found</i>
       ) : (
@@ -26,11 +61,11 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
           <table className="task-table">
             <thead>
               <tr>
-                <th className="field-label">Title</th>
-                <th className="field-label">Description</th>
-                <th className="field-label">Due Date</th>
-                <th className="field-label">Priority</th>
-                <th className="field-label">Status</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("title",undefined)}>Title {getSortIndicator("title")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("description",undefined)}>Description {getSortIndicator("description")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("dueDate",undefined)}>Due Date {getSortIndicator("dueDate")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("priority",undefined)}>Priority {getSortIndicator("priority")}</th>
+                <th className="field-label cursor sortable" onClick={() => handleSort("status",undefined)}>Status {getSortIndicator("status")}</th>
                 <th className="field-label">Actions</th>
               </tr>
             </thead>

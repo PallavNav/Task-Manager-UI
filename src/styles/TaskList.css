@@ -34,4 +34,25 @@
   .no-taks {
     text-align: left !important;
   }
+
+  .cursor {
+    cursor: pointer;
+  }
+
+  .sortable {
+    cursor: pointer;
+    position: relative;
+    padding-right: 15px;
+  }
+  
+  .sortable:hover {
+    color: #007bff;
+  }
+  
+  .sortable::after {
+    content: "";
+    position: absolute;
+    right: 5px;
+  }
+  
   
