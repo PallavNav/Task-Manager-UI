@@ -51,7 +51,7 @@ const TaskDetails = () => {
                     <p><strong>Due Date:</strong> {taskDetails.dueDate}</p>
                     <p><strong>Priority:</strong> <span className={`priority-${taskDetails?.priority?.toLowerCase()}`}>{taskDetails?.priority}</span></p>
                     <p><strong>Status:</strong> <span className={`status-${taskDetails?.status?.toLowerCase()}`}>{taskDetails?.status}</span></p>
-                    <button type="button" onClick={handleBack} className="edit-button">
+                    <button type="button" onClick={handleBack} className="edit-button back-btn">
                         Manage Tasks
                     </button>
                 </div>

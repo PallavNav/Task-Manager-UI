@@ -38,4 +38,8 @@
   .status-completed {
     color: green;
   }
+
+  .back-btn {
+    width: 20rem;
+  }
   
