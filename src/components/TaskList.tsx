@@ -72,11 +72,11 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
             <tbody>
               {tasks.length > 0 && tasks.map((task) => (
                 <tr key={task.id}>
-                  <td>{(task.title.length > truncationLimit) ? task.title.slice(0, truncationLimit).concat('...') : task.title}</td>
-                  <td>{(task.description.length > truncationLimit) ? task.description.slice(0, truncationLimit).concat('...') : task.description}</td>
-                  <td>{ConvertDate(task.dueDate)}</td>
-                  <td>{task.priority}</td>
-                  <td>{task.status}</td>
+                  <td title={task.title}>{(task.title.length > truncationLimit) ? task.title.slice(0, truncationLimit).concat('...') : task.title}</td>
+                  <td title={task.description}>{(task.description.length > truncationLimit) ? task.description.slice(0, truncationLimit).concat('...') : task.description}</td>
+                  <td title={task.dueDate}>{ConvertDate(task.dueDate)}</td>
+                  <td title={task.priority}>{task.priority}</td>
+                  <td title={task.status}>{task.status}</td>
                   <td>
                     <Link to={`/tasks/details/${task.id}`}>
                       <button className="edit-button">Details</button>
