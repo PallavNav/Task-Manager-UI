@@ -7,6 +7,7 @@ import TaskEditPage from "./components/TaskEditPage";
 import Header from "./pages/Header";
 import { apiServices } from "./services/service";
 import { ConvertDate } from "./util/ConvertDate";
+import Loader from "./pages/Loader";
 
 import {
   Routes,
@@ -30,10 +31,11 @@ function App() {
   console.log("API URL:", import.meta.env.VITE_API_URL);
   console.log("BASE_URL:", BASE_URL);
   const navigate = useNavigate();
-
+  const [displayLoader, setDisplayLoader] = useState<boolean>(false);
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
   useEffect(() => {
+    setDisplayLoader(true);
     fetchAllTasks();
   }, [])
 
@@ -48,12 +50,15 @@ function App() {
         alert('Task Updated Successfully!');
         navigate('/');
       }
+      setDisplayLoader(false);
     } catch (error) {
       console.error("Error fetching tasks", error);
+      setDisplayLoader(false);
     }
   }
 
   const saveTask = (newTask: Task) => {
+    setDisplayLoader(true);
     if (newTask.id) {
       updateUserTask(newTask);
     } else {
@@ -74,6 +79,7 @@ function App() {
       fetchAllTasks('UPDATE');
     } catch (error) {
       console.error("Error updating tasks", error);
+      setDisplayLoader(false);
     }
   }
 
@@ -83,6 +89,7 @@ function App() {
       fetchAllTasks('CREATE');
     } catch (error) {
       console.error("Error fetching tasks", error);
+      setDisplayLoader(false);
     }
   }
 
@@ -91,8 +98,10 @@ function App() {
     if(deleteConfirmation) {
       try {
         await axios.delete(`${BASE_URL}/tasks/${id}`);
+        setDisplayLoader(true);
         fetchAllTasks();
       } catch (error) {
+        setDisplayLoader(false);
         console.error("Error deleting tasks", error);
       }
     }
@@ -100,25 +109,25 @@ function App() {
 
   return (
     <>
-      {/* <Router> */}
       <Header />
-      <Routes>
-        <Route
-          path="/"
-          element={<TaskPage tasks={tasks} onDelete={deleteTask} />}
-        ></Route>
-        <Route
-          path="/tasks/new"
-          element={<TaskForm onSave={saveTask} existingTask={taskToEdit} />}
-        ></Route>
-        <Route
-          path="/tasks/:id"
-          element={<TaskEditPage tasks={tasks} onSave={saveTask} />}
-        />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-      {/* </Router> */}
-    </>
+      {displayLoader ? <Loader /> : (
+        <Routes>
+          <Route
+            path="/"
+            element={<TaskPage tasks={tasks} onDelete={deleteTask} />}
+          />
+          <Route
+            path="/tasks/new"
+            element={<TaskForm onSave={saveTask} existingTask={taskToEdit} />}
+          />
+          <Route
+            path="/tasks/:id"
+            element={<TaskEditPage tasks={tasks} onSave={saveTask} />}
+          />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      )}
+    </>  
   );
 }
 
