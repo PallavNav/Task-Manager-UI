@@ -74,7 +74,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
                 <tr key={task.id}>
                   <td title={task.title}>{(task.title.length > truncationLimit) ? task.title.slice(0, truncationLimit).concat('...') : task.title}</td>
                   <td title={task.description}>{(task.description.length > truncationLimit) ? task.description.slice(0, truncationLimit).concat('...') : task.description}</td>
-                  <td title={task.dueDate}>{ConvertDate(task.dueDate)}</td>
+                  <td title={ConvertDate(task.dueDate)}>{ConvertDate(task.dueDate)}</td>
                   <td title={task.priority}>{task.priority}</td>
                   <td title={task.status}>{task.status}</td>
                   <td>
