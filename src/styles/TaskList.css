@@ -54,5 +54,10 @@
     position: absolute;
     right: 5px;
   }
+
+  .disabled-button {
+    background: gray !important;
+    cursor: not-allowed;
+  }
   
   

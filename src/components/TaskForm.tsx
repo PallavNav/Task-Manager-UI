@@ -14,6 +14,7 @@ type Task = {
   dueDate: string;
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
+  isChecked:boolean;
 };
 
 const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
@@ -25,6 +26,7 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
     dueDate: "",
     priority: "Low",
     status: "Pending",
+    isChecked:false
   });
   const [errors, setErrors] = useState<{ title?: string; description?: string; dueDate?: string }>({});
 
@@ -64,6 +66,7 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
       dueDate: "",
       priority: "Medium",
       status: "Pending",
+      isChecked:false
     });
   };
 
