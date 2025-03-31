@@ -3,7 +3,7 @@ import "./Header.css";
 const Header = () => {
   return (
     <header className="header">
-      <h1 className="text-content">Taskify <sub className="subscript">- Your favorite task manager, designed by Nav Pallav</sub></h1>
+      <h1 className="text-content">Taskify <sub className="subscript">- Your favorite task manager, designed by Nav Pallav Local</sub></h1>
     </header>
   );
 };
