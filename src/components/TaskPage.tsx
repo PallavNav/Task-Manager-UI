@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import TaskList from "./TaskList";
 import TaskFilter from "./TaskFilter";
 import "../styles/TaskPage.css";
+import { apiServices } from "../services/service";
 
 type TaskPageProps = {
   tasks: Task[];
@@ -24,7 +25,7 @@ type Task = {
 
 const TaskPage = ({ tasks, onDelete, checkBoxSelection, bulkDelete, handleSelectAll }: TaskPageProps) => {
   const [filteredTasks, setFilteredTasks] = useState(tasks);
-
+  const IS_LOCAL = apiServices.IS_LOCAL;
   const handleFilterChange = (filters: {
     status: string;
     priority: string;
@@ -55,7 +56,7 @@ const TaskPage = ({ tasks, onDelete, checkBoxSelection, bulkDelete, handleSelect
         <Link to="/tasks/new">
           <button className="add-task-btn">Add New Task</button>
         </Link>
-        {tasks?.length > 0 && <button onClick={bulkDelete} className={!checkISValid() ? "disabled-button add-task-btn" : "add-task-btn"} disabled={!checkISValid()}>Delete Bulk Records</button>}
+        {tasks?.length > 0 && IS_LOCAL && <button onClick={bulkDelete} className={!checkISValid() ? "disabled-button add-task-btn" : "add-task-btn"} disabled={!checkISValid()}>Delete Bulk Records</button>}
         {tasks?.length > 0 && (
           <div className="filter-container">
             <TaskFilter onFilterChange={handleFilterChange} />
