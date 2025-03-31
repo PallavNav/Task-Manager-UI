@@ -25,6 +25,7 @@ type Task = {
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
   isChecked: boolean;
+  operations:string[]
 };
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
       dueDate: '2025/01/12',
       priority: "Low",
       status: "Pending",
-      isChecked: false
+      isChecked: false,
+      operations:['CREATE']
     }
   ]);
   const BASE_URL = apiServices.base_url;
@@ -92,8 +94,10 @@ function App() {
   };
 
   const updateUserTask = async (newTask: Task) => {
+    const newOps = 'EDIT';
+    newTask.dueDate = ConvertDate(newTask.dueDate);
+    newTask.operations = [...newTask.operations, newOps];
     try {
-      newTask.dueDate = ConvertDate(newTask.dueDate);
       if (IS_LOCAL) {
         setTasks((prev: any) => prev.map((item: any) => (item.id === newTask.id) ? newTask : item));
         setDisplayLoader(false);
@@ -111,6 +115,9 @@ function App() {
 
   const saveUserTask = async (newTask: Task) => {
     try {
+      const newOps = 'CREATE';
+      newTask.dueDate = ConvertDate(newTask.dueDate);
+      newTask.operations = [...newTask.operations, newOps];
       newTask.dueDate = ConvertDate(newTask.dueDate);
       if (IS_LOCAL) {
         setTasks((prev: Task[]) => {

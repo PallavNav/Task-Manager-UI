@@ -18,6 +18,7 @@ type Task = {
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
   isChecked:boolean;
+  operations:string[]
 };
 
 const TaskEditPage = ({ tasks, onSave }: TaskEditPageProps) => {
