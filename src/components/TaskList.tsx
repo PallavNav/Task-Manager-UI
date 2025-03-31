@@ -78,8 +78,8 @@ const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskL
                 <th className="field-label cursor sortable" onClick={() => handleSort("description", undefined)}>Description {getSortIndicator("description")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("dueDate", undefined)}>Due Date {getSortIndicator("dueDate")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("priority", undefined)}>Priority {getSortIndicator("priority")}</th>
-                <th className="field-label cursor sortable" onClick={() => handleSort("status", undefined)}>Operations {getSortIndicator("status")}</th>
-                {IS_LOCAL && <th className="field-label cursor sortable" onClick={() => handleSort("status", undefined)}>Status {getSortIndicator("status")}</th>}
+                <th className="field-label cursor sortable" onClick={() => handleSort("status", undefined)}>Status {getSortIndicator("status")}</th>
+                {IS_LOCAL &&<th className="field-label cursor sortable">Operations</th>}
                 <th className="field-label">Actions</th>
               </tr>
             </thead>
