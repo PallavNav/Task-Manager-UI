@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { apiServices } from "../services/service";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../pages/Loader";
 
 type TaskDetailsProps = {
     tasks: Task[];
@@ -18,23 +19,34 @@ type Task = {
     status: "Pending" | "Completed";
 };
 
-const TaskDetails = () => {
+const TaskDetails = ({tasks}:any) => {
     const navigate = useNavigate();
+    const IS_LOCAL = apiServices.IS_LOCAL;
     const { id } = useParams<{ id: string }>();
     const [taskDetails, setTaskDetails] = useState<any>([]);
+    const [displayLoader, setDisplayLoader] = useState<boolean>(false);
     const BASE_URL = apiServices.base_url;
 
     useEffect(() => {
+        setDisplayLoader(true);
         getTaskDetails();
     }, []);
 
     const getTaskDetails = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/tasks/${id}`);
-            response.data.dueDate = ConvertDate(response.data.dueDate);
-            setTaskDetails(response.data);
+            if (IS_LOCAL) {
+                console.log(tasks);
+                const taskToShow:any = tasks.find((item:any)=> item.id === id);
+                setTaskDetails(taskToShow);
+              } else {
+                const response = await axios.get(`${BASE_URL}/tasks/${id}`);
+                response.data.dueDate = ConvertDate(response.data.dueDate);
+                setTaskDetails(response.data);
+              }
+              setDisplayLoader(false);
         } catch (error) {
             console.error("Error fetching tasks", error);
+            setDisplayLoader(false);
         }
     }
 
@@ -45,7 +57,7 @@ const TaskDetails = () => {
     return (
         <>
             <div className="task-details">
-                <div className="task-info">
+                {!displayLoader? (<div className="task-info">
                     <p><strong>Title:</strong> {taskDetails.title}</p>
                     <p><strong>Description:</strong> {taskDetails.description}</p>
                     <p><strong>Due Date:</strong> {taskDetails.dueDate}</p>
@@ -54,7 +66,7 @@ const TaskDetails = () => {
                     <button type="button" onClick={handleBack} className="edit-button back-btn">
                         Manage Tasks
                     </button>
-                </div>
+                </div>) : (<Loader />)}
 
             </div>
 

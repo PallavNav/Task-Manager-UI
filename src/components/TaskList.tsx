@@ -28,6 +28,9 @@ const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskL
 
   useEffect(() => {
     handleSort("dueDate", "asc");
+  }, []);
+
+  useEffect(() => {
     const isAllCheckboxSelected = tasks.every((item) => item.isChecked);
     setIsAllChecked(isAllCheckboxSelected);
   }, [tasks]);
@@ -68,7 +71,7 @@ const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskL
           <table className="task-table">
             <thead>
               <tr>
-                <th className="field-label"><input type="checkbox" checked={isAllChecked} onClick={handleSelectAll}/>Select All </th>
+                <th><input type="checkbox" checked={isAllChecked} onClick={handleSelectAll}/>Select All </th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("title", undefined)}>Title {getSortIndicator("title")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("description", undefined)}>Description {getSortIndicator("description")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("dueDate", undefined)}>Due Date {getSortIndicator("dueDate")}</th>

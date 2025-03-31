@@ -20,11 +20,12 @@ type Task = {
   isChecked:boolean;
 };
 
-const TaskEditPage = ({ onSave }: TaskEditPageProps) => {
+const TaskEditPage = ({ tasks, onSave }: TaskEditPageProps) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
   const BASE_URL = apiServices.base_url;
+  const IS_LOCAL = apiServices.IS_LOCAL;
 
   useEffect(() => {
     console.log('Changes!!');
@@ -33,9 +34,15 @@ const TaskEditPage = ({ onSave }: TaskEditPageProps) => {
 
   const fetchTaskDetailsToBeEdited = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/tasks/${id}`);
-      response.data.dueDate = ConvertDate(response.data.dueDate);
-      setTaskToEdit(response.data);
+      if (IS_LOCAL) {
+        console.log(tasks);
+        const taskToEdit:any = tasks.find((item)=> item.id === id);
+        setTaskToEdit(taskToEdit);
+      } else {
+        const response = await axios.get(`${BASE_URL}/tasks/${id}`);
+        response.data.dueDate = ConvertDate(response.data.dueDate);
+        setTaskToEdit(response.data);
+      }
     } catch (error) {
       console.error("Error fetching tasks", error);
     }

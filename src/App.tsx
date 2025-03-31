@@ -24,7 +24,7 @@ type Task = {
   dueDate: string;
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
-  isChecked:boolean;
+  isChecked: boolean;
 };
 
 function App() {
@@ -36,12 +36,13 @@ function App() {
       dueDate: '2025/01/12',
       priority: "Low",
       status: "Pending",
-      isChecked:false
+      isChecked: false
     }
   ]);
   const BASE_URL = apiServices.base_url;
+  const IS_LOCAL = apiServices.IS_LOCAL;
   console.log("API URL:", import.meta.env.VITE_API_URL);
-  console.log("BASE_URL:", BASE_URL);
+  console.log("IS_LOCAL:", apiServices.IS_LOCAL);
   const navigate = useNavigate();
   const [displayLoader, setDisplayLoader] = useState<boolean>(false);
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
@@ -53,9 +54,14 @@ function App() {
 
   const fetchAllTasks = async (type?: any) => {
     try {
-      const response = await axios.get(`${BASE_URL}/tasks`);
-      const updatedTask = response.data.map((item:any) => ({...item,isChecked:false}));
-      setTasks(updatedTask);
+      let updatedTask: any;
+      if (IS_LOCAL) {
+        updatedTask = tasks.map((item: any) => ({ ...item, isChecked: false }));
+      } else {
+        const response = await axios.get(`${BASE_URL}/tasks`);
+        updatedTask = response.data.map((item: any) => ({ ...item, isChecked: false }));
+      }
+      setTasks([...updatedTask]);
       if (type === 'CREATE') {
         alert('Task Created Successfully!');
         navigate('/');
@@ -88,8 +94,15 @@ function App() {
   const updateUserTask = async (newTask: Task) => {
     try {
       newTask.dueDate = ConvertDate(newTask.dueDate);
-      await axios.put(`${BASE_URL}/tasks/${newTask.id}`, newTask);
-      fetchAllTasks('UPDATE');
+      if (IS_LOCAL) {
+        setTasks((prev: any) => prev.map((item: any) => (item.id === newTask.id) ? newTask : item));
+        setDisplayLoader(false);
+        alert('Task Updated Successfully!');
+        navigate('/');
+      } else {
+        await axios.put(`${BASE_URL}/tasks/${newTask.id}`, newTask);
+        fetchAllTasks('UPDATE');
+      }
     } catch (error) {
       console.error("Error updating tasks", error);
       setDisplayLoader(false);
@@ -98,8 +111,19 @@ function App() {
 
   const saveUserTask = async (newTask: Task) => {
     try {
-      await axios.post(`${BASE_URL}/tasks`, newTask);
-      fetchAllTasks('CREATE');
+      newTask.dueDate = ConvertDate(newTask.dueDate);
+      if (IS_LOCAL) {
+        setTasks((prev: Task[]) => {
+          const updatedTask = [...prev, newTask];
+          return updatedTask;
+        });
+        setDisplayLoader(false);
+        alert('Task Created Successfully!');
+        navigate('/');
+      } else {
+        await axios.post(`${BASE_URL}/tasks`, newTask);
+        fetchAllTasks('CREATE');
+      }
     } catch (error) {
       console.error("Error fetching tasks", error);
       setDisplayLoader(false);
@@ -110,9 +134,17 @@ function App() {
     const deleteConfirmation = window.confirm('Sure you want to delete this task?');
     if (deleteConfirmation) {
       try {
-        await axios.delete(`${BASE_URL}/tasks/${id}`);
-        setDisplayLoader(true);
-        fetchAllTasks();
+        if (IS_LOCAL) {
+          setTasks((prev: Task[]) => {
+            const nonDeletedRecords = prev.filter((item)=> item.id !== id);
+            return nonDeletedRecords;
+          });
+          setDisplayLoader(false);
+        } else {
+          await axios.delete(`${BASE_URL}/tasks/${id}`);
+          setDisplayLoader(true);
+          fetchAllTasks();
+        }
       } catch (error) {
         setDisplayLoader(false);
         console.error("Error deleting tasks", error);
@@ -122,16 +154,16 @@ function App() {
 
   const handleCheckBoxSelection = (id: string, value: boolean) => {
     console.log(tasks);
-    setTasks((prev:any)=> prev.map((item:any)=> (item.id === id)? {...item,isChecked:value} : item));
+    setTasks((prev: any) => prev.map((item: any) => (item.id === id) ? { ...item, isChecked: value } : item));
   }
 
   const handleBulkDelete = () => {
     console.log(tasks);
-    setTasks((prev:any)=> prev.filter((item:any)=> !item.isChecked));
+    setTasks((prev: any) => prev.filter((item: any) => !item.isChecked));
   }
 
   const handleSelectAll = () => {
-    const updatedTask = tasks.map((item:any)=> ({...item, isChecked:!item.isChecked}));
+    const updatedTask = tasks.map((item: any) => ({ ...item, isChecked: !item.isChecked }));
     setTasks(updatedTask);
   }
 
@@ -142,7 +174,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<TaskPage tasks={tasks} onDelete={deleteTask} checkBoxSelection={handleCheckBoxSelection} bulkDelete={handleBulkDelete} handleSelectAll={handleSelectAll}/>}
+            element={<TaskPage tasks={tasks} onDelete={deleteTask} checkBoxSelection={handleCheckBoxSelection} bulkDelete={handleBulkDelete} handleSelectAll={handleSelectAll} />}
           />
           <Route
             path="/tasks/new"
@@ -154,7 +186,7 @@ function App() {
           />
           <Route
             path="/tasks/details/:id"
-            element={<TaskDetails />}
+            element={<TaskDetails tasks={tasks}/>}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
