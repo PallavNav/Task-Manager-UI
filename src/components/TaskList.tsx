@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 type TaskListProps = {
   tasks: Task[];
   onDelete: (id: string) => void;
+  checkBoxSelection: (id: string, isChecked: boolean) => void;
+  handleSelectAll: () => void;
 };
 
 type Task = {
@@ -15,14 +17,19 @@ type Task = {
   dueDate: string;
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
+  isChecked: boolean;
 };
 
-const TaskList = ({ tasks, onDelete }: TaskListProps) => {
+const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskListProps) => {
   const [sortOrder, setSortOrder] = useState<string>('desc');
   const [sortColumn, setSortColumn] = useState<any>('dueDate');
+  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   const truncationLimit = 25;
+
   useEffect(() => {
     handleSort("dueDate", "asc");
+    const isAllCheckboxSelected = tasks.every((item) => item.isChecked);
+    setIsAllChecked(isAllCheckboxSelected);
   }, [tasks]);
 
   const handleSort = (column: any, order: any) => {
@@ -61,6 +68,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
           <table className="task-table">
             <thead>
               <tr>
+                <th className="field-label"><input type="checkbox" checked={isAllChecked} onClick={handleSelectAll}/>Select All </th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("title", undefined)}>Title {getSortIndicator("title")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("description", undefined)}>Description {getSortIndicator("description")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("dueDate", undefined)}>Due Date {getSortIndicator("dueDate")}</th>
@@ -72,6 +80,7 @@ const TaskList = ({ tasks, onDelete }: TaskListProps) => {
             <tbody>
               {tasks.length > 0 && tasks.map((task) => (
                 <tr key={task.id}>
+                  <td><input type="checkbox" checked={task.isChecked} onClick={(e: any) => checkBoxSelection(task.id, e.target.checked)} /></td>
                   <td title={task.title}>{(task.title.length > truncationLimit) ? task.title.slice(0, truncationLimit).concat('...') : task.title}</td>
                   <td title={task.description}>{(task.description.length > truncationLimit) ? task.description.slice(0, truncationLimit).concat('...') : task.description}</td>
                   <td title={ConvertDate(task.dueDate)}>{ConvertDate(task.dueDate)}</td>

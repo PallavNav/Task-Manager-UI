@@ -24,10 +24,21 @@ type Task = {
   dueDate: string;
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
+  isChecked:boolean;
 };
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      id: '123',
+      title: 'LocaL',
+      description: 'local',
+      dueDate: '2025/01/12',
+      priority: "Low",
+      status: "Pending",
+      isChecked:false
+    }
+  ]);
   const BASE_URL = apiServices.base_url;
   console.log("API URL:", import.meta.env.VITE_API_URL);
   console.log("BASE_URL:", BASE_URL);
@@ -43,7 +54,8 @@ function App() {
   const fetchAllTasks = async (type?: any) => {
     try {
       const response = await axios.get(`${BASE_URL}/tasks`);
-      setTasks(response.data);
+      const updatedTask = response.data.map((item:any) => ({...item,isChecked:false}));
+      setTasks(updatedTask);
       if (type === 'CREATE') {
         alert('Task Created Successfully!');
         navigate('/');
@@ -96,7 +108,7 @@ function App() {
 
   const deleteTask = async (id: string) => {
     const deleteConfirmation = window.confirm('Sure you want to delete this task?');
-    if(deleteConfirmation) {
+    if (deleteConfirmation) {
       try {
         await axios.delete(`${BASE_URL}/tasks/${id}`);
         setDisplayLoader(true);
@@ -108,6 +120,21 @@ function App() {
     }
   };
 
+  const handleCheckBoxSelection = (id: string, value: boolean) => {
+    console.log(tasks);
+    setTasks((prev:any)=> prev.map((item:any)=> (item.id === id)? {...item,isChecked:value} : item));
+  }
+
+  const handleBulkDelete = () => {
+    console.log(tasks);
+    setTasks((prev:any)=> prev.filter((item:any)=> !item.isChecked));
+  }
+
+  const handleSelectAll = () => {
+    const updatedTask = tasks.map((item:any)=> ({...item, isChecked:!item.isChecked}));
+    setTasks(updatedTask);
+  }
+
   return (
     <>
       <Header />
@@ -115,7 +142,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<TaskPage tasks={tasks} onDelete={deleteTask} />}
+            element={<TaskPage tasks={tasks} onDelete={deleteTask} checkBoxSelection={handleCheckBoxSelection} bulkDelete={handleBulkDelete} handleSelectAll={handleSelectAll}/>}
           />
           <Route
             path="/tasks/new"
@@ -127,12 +154,12 @@ function App() {
           />
           <Route
             path="/tasks/details/:id"
-            element={<TaskDetails/>}
+            element={<TaskDetails />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
-    </>  
+    </>
   );
 }
 

@@ -17,6 +17,7 @@ type Task = {
   dueDate: string;
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
+  isChecked:boolean;
 };
 
 const TaskEditPage = ({ onSave }: TaskEditPageProps) => {
