@@ -25,6 +25,7 @@ type Task = {
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
   isChecked: boolean;
+  operations: string[]
 };
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
       dueDate: '2025/01/12',
       priority: "Low",
       status: "Pending",
-      isChecked: false
+      isChecked: false,
+      operations: ['CREATE']
     }
   ]);
   const BASE_URL = apiServices.base_url;
@@ -92,8 +94,10 @@ function App() {
   };
 
   const updateUserTask = async (newTask: Task) => {
+    const newOps = 'EDIT';
+    newTask.dueDate = ConvertDate(newTask.dueDate);
+    newTask.operations = [...newTask.operations, newOps];
     try {
-      newTask.dueDate = ConvertDate(newTask.dueDate);
       if (IS_LOCAL) {
         setTasks((prev: any) => prev.map((item: any) => (item.id === newTask.id) ? newTask : item));
         setDisplayLoader(false);
@@ -111,6 +115,9 @@ function App() {
 
   const saveUserTask = async (newTask: Task) => {
     try {
+      const newOps = 'CREATE';
+      newTask.dueDate = ConvertDate(newTask.dueDate);
+      newTask.operations = [...newTask.operations, newOps];
       newTask.dueDate = ConvertDate(newTask.dueDate);
       if (IS_LOCAL) {
         setTasks((prev: Task[]) => {
@@ -136,7 +143,7 @@ function App() {
       try {
         if (IS_LOCAL) {
           setTasks((prev: Task[]) => {
-            const nonDeletedRecords = prev.filter((item)=> item.id !== id);
+            const nonDeletedRecords = prev.filter((item) => item.id !== id);
             return nonDeletedRecords;
           });
           setDisplayLoader(false);
@@ -153,13 +160,23 @@ function App() {
   };
 
   const handleCheckBoxSelection = (id: string, value: boolean) => {
-    console.log(tasks);
     setTasks((prev: any) => prev.map((item: any) => (item.id === id) ? { ...item, isChecked: value } : item));
   }
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     console.log(tasks);
-    setTasks((prev: any) => prev.filter((item: any) => !item.isChecked));
+    if (IS_LOCAL) {
+      setTasks((prev: any) => prev.filter((item: any) => !item.isChecked));
+    } else {
+      const taskToBeDeleted:any[] = tasks.filter((item: any) => item.isChecked).map((item)=> item.id);
+      if (taskToBeDeleted.length > 1) {
+        await axios.delete(`${BASE_URL}/tasks`, { data: { ids: taskToBeDeleted } });
+      } else if (taskToBeDeleted.length === 1) {
+        await axios.delete(`${BASE_URL}/tasks/${taskToBeDeleted[0]}`);
+      }      
+      setDisplayLoader(true);
+      fetchAllTasks();
+    }
   }
 
   const handleSelectAll = () => {
@@ -186,7 +203,7 @@ function App() {
           />
           <Route
             path="/tasks/details/:id"
-            element={<TaskDetails tasks={tasks}/>}
+            element={<TaskDetails tasks={tasks} />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

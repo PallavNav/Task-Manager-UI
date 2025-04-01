@@ -19,6 +19,7 @@ type Task = {
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
   isChecked: boolean;
+  operations:string[]
 };
 
 const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskListProps) => {
@@ -78,6 +79,7 @@ const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskL
                 <th className="field-label cursor sortable" onClick={() => handleSort("dueDate", undefined)}>Due Date {getSortIndicator("dueDate")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("priority", undefined)}>Priority {getSortIndicator("priority")}</th>
                 <th className="field-label cursor sortable" onClick={() => handleSort("status", undefined)}>Status {getSortIndicator("status")}</th>
+                {IS_LOCAL &&<th className="field-label cursor sortable">Operations</th>}
                 <th className="field-label">Actions</th>
               </tr>
             </thead>
@@ -89,6 +91,11 @@ const TaskList = ({ tasks, onDelete, checkBoxSelection, handleSelectAll }: TaskL
                   <td title={task.description}>{(task.description.length > truncationLimit) ? task.description.slice(0, truncationLimit).concat('...') : task.description}</td>
                   <td title={ConvertDate(task.dueDate)}>{ConvertDate(task.dueDate)}</td>
                   <td title={task.priority}>{task.priority}</td>
+                  {IS_LOCAL && <td title={task.priority}>
+                    {task.operations.map((ops:any)=>(
+                      <div>{ops}</div>
+                    ))}
+                  </td>}
                   <td title={task.status}>{task.status}</td>
                   <td>
                     <Link to={`/tasks/details/${task.id}`}>

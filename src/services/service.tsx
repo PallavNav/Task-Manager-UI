@@ -5,5 +5,6 @@ export const apiServices = {
     },
     get IS_LOCAL() {
         return import.meta.env.IS_LOCAL
+        // return false
     }
 };
