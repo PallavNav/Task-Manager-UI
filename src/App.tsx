@@ -94,9 +94,7 @@ function App() {
   };
 
   const updateUserTask = async (newTask: Task) => {
-    const newOps = 'EDIT';
     newTask.dueDate = ConvertDate(newTask.dueDate);
-    newTask.operations = [...newTask.operations, newOps];
     try {
       if (IS_LOCAL) {
         setTasks((prev: any) => prev.map((item: any) => (item.id === newTask.id) ? newTask : item));
@@ -117,7 +115,7 @@ function App() {
     try {
       const newOps = 'CREATE';
       newTask.dueDate = ConvertDate(newTask.dueDate);
-      newTask.operations = [...newTask.operations, newOps];
+      newTask.operations = [newOps];
       newTask.dueDate = ConvertDate(newTask.dueDate);
       if (IS_LOCAL) {
         setTasks((prev: Task[]) => {

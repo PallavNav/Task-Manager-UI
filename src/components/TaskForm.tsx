@@ -60,7 +60,8 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
     e.preventDefault();
     if (!validate()) return;
     if (!task.title.trim()) return;
-    onSave(task);
+    const editedTask = {...task,operations:[...(task.operations|| []),'EDIT']}
+    onSave(editedTask);
     setTask({
       id: "",
       title: "",
@@ -68,7 +69,8 @@ const TaskForm = ({ onSave, existingTask }: TaskFormProps) => {
       dueDate: "",
       priority: "Medium",
       status: "Pending",
-      isChecked:false
+      isChecked:false,
+      operations:[]
     });
   };
 
