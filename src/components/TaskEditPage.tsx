@@ -17,8 +17,8 @@ type Task = {
   dueDate: string;
   priority: "Low" | "Medium" | "High";
   status: "Pending" | "Completed";
-  isChecked:boolean;
-  operations:string[]
+  isChecked: boolean;
+  operations: string[]
 };
 
 const TaskEditPage = ({ tasks, onSave }: TaskEditPageProps) => {
@@ -37,7 +37,7 @@ const TaskEditPage = ({ tasks, onSave }: TaskEditPageProps) => {
     try {
       if (IS_LOCAL) {
         console.log(tasks);
-        const taskToEdit:any = tasks.find((item)=> item.id === id);
+        const taskToEdit: any = tasks.find((item) => item.id === id);
         setTaskToEdit(taskToEdit);
       } else {
         const response = await axios.get(`${BASE_URL}/tasks/${id}`);
